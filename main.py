@@ -1,8 +1,8 @@
-from captcha import *
 import requests as r
 
 u = r.get('http://localhost:8080')
-print(u.text)
+with open('saved_captcha.png', 'wb') as file:
+    file.write(u.content)
 ans = input()
 u = r.post('http://localhost:8080', data=ans)
-print(u.text)
+print(u.status_code)

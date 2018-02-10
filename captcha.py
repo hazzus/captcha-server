@@ -43,7 +43,6 @@ class captcha:
         d.text((x, y), self.__code, font=font, fill=(0, 0, 0, 255))
         draw_lines()
         draw_dots()
-
         del d
 
     def get_image(self):
