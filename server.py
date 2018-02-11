@@ -31,7 +31,7 @@ class HttpProcessor(BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write('Out of time'.encode())
             else:
-                client_code = self.rfile.read(len(self.__captcha_codes[client]) + 2).decode()[2:]
+                client_code = self.rfile.read(len(self.__captcha_codes[client]) + 7).decode()[7:]
                 print('Client insert: ' + client_code)
                 print('Expected: ' + self.__captcha_codes[client])
                 self.send_response(200)

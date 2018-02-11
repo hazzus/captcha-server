@@ -10,7 +10,7 @@ class HtmlPage:
         self.body = '''
         <img src="''' + src + '''" align=middle>
         <form method="post" action="''' + address + '''">
-            <input type="text" name="c">
+            <input type="text" name="answer">
             <input type="submit">
         </form>
         '''

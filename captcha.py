@@ -46,7 +46,12 @@ class captcha:
         del d
 
     def get_image(self):
-        return self.__image
+        image = self.__image
+        self.clear_image()
+        return image
 
     def get_code(self):
         return self.__code
+
+    def clear_image(self):
+        self.__image = Image.new('RGBA', (MX, MY), (255, 255, 255, 255))
