@@ -39,7 +39,7 @@ class captcha:
         y = r.randint(10, 25)
         draw_lines()
         draw_dots()
-        # разный шрифт, размер и угол для буковок
+        # разный шрифт, размер и угол для букв
         d.text((x, y), self.__code, font=font, fill=(0, 0, 0, 255))
         draw_lines()
         draw_dots()

@@ -1,7 +1,7 @@
-from http.server import BaseHTTPRequestHandler, HTTPServer
-import time
-from captcha import *
 import os
+import time
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from captcha import *
 
 
 class HttpProcessor(BaseHTTPRequestHandler):
@@ -18,35 +18,43 @@ class HttpProcessor(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('content-type', 'image/png')
         self.end_headers()
-        self.wfile.write(self.load_binary(file))
+        self.wfile.write(load_binary(file))
         os.remove(file)
 
     def do_POST(self):
         income_time = time.time()
         client = self.client_address[0]
-        if (income_time - self.__request_time[client]) > 1:
-            self.send_response(408)
+        if client in self.__captcha_codes:
+            if (income_time - self.__request_time[client]) > 30:
+                self.send_response(408)
+                self.send_header('content-type', 'text/html')
+                self.end_headers()
+                self.wfile.write('Out of time'.encode())
+            else:
+                client_code = self.rfile.read(len(self.__captcha_codes[client]) + 2).decode()[2:]
+                print('Client insert: ' + client_code)
+                print('Expected: ' + self.__captcha_codes[client])
+                self.send_response(200)
+                if client_code != self.__captcha_codes[client]:
+                    self.send_header('content-type', 'text/html')
+                    self.end_headers()
+                    self.wfile.write('Bad captcha'.encode())
+                else:
+                    self.send_header('content-type', 'text/html')
+                    self.end_headers()
+                    self.wfile.write('Good, access granted'.encode())
+            self.__captcha_codes.pop(client)
+            self.__request_time.pop(client)
+        else:
+            self.send_response(401)
             self.send_header('content-type', 'text/html')
             self.end_headers()
-            self.wfile.write('Out of time'.encode())
-        else:
-            client_code = self.rfile.read(len(self.__captcha_codes[client])).decode()
-            print('Client insert: ' + client_code)
-            print('Expected: ' + self.__captcha_codes[client])
-            self.send_response(200)
-            if client_code != self.__captcha_codes[client]:
-                self.send_header('content-type', 'text/html')
-                self.end_headers()
-                self.wfile.write('Bad captcha'.encode())
-            else:
-                self.send_header('content-type', 'text/html')
-                self.end_headers()
-                self.wfile.write('Good, access granted'.encode())
+            self.wfile.write('''Captcha wasn't requested before'''.encode())
 
-    @staticmethod
-    def load_binary(file):
-        with open(file, 'rb') as file:
-            return file.read()
+
+def load_binary(file):
+    with open(file, 'rb') as file:
+        return file.read()
 
 
 serv = HTTPServer(('localhost', 8080), HttpProcessor)
