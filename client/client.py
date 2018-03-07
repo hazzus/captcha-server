@@ -4,10 +4,12 @@ from htmlpage import HtmlPage
 
 SERVER_ADDRESS = 'http://localhost:8080/'
 
+# TODO normal client
+
 
 def save(pic):
     path = 'saved_captcha.png'
-    with open('client/' + path, 'wb') as file:
+    with open(path, 'wb') as file:
         file.write(pic)
     return path
 

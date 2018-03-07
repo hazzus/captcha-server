@@ -22,7 +22,7 @@ class HtmlPage:
         return '<html>' + self.head + '<body>' + self.body + '</body></html>'
 
     def save(self):
-        path = 'client/captcha.html'
+        path = 'captcha.html'
         if len(self.body) > 0:
             with open(path, 'w+') as file:
                 file.write(self.construct())
