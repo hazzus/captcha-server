@@ -18,7 +18,7 @@ class captcha:
         return r.randint(x, y), r.randint(x, y), r.randint(x, y), transparency
 
     def __random_font(self):
-        return ImageFont.truetype('fonts/' + self.__fonts[r.randint(0, len(self.__fonts) - 1)]+'.ttf', 30)
+        return ImageFont.truetype('fonts/' + self.__fonts[r.randint(0, len(self.__fonts) - 1)]+'.ttf', r.randint(25, 35))
 
     def __init__(self):
         self.__create_captcha_code()
@@ -28,7 +28,7 @@ class captcha:
         self.__draw_captcha()
 
     def __create_captcha_code(self):
-        alphabet = '123456789abdefghijklmnpqrstvxyz'
+        alphabet = '123456789abdefghijkmnpqrstvxyz'
         length = r.randint(4, 7)
         for i in range(length):
             self.__code += r.choice(alphabet)
@@ -41,16 +41,17 @@ class captcha:
                 d.line([0, r.randint(0, self.MY), self.MX, r.randint(0, self.MY)], fill=color)
                 d.line([r.randint(0, self.MX), 0, r.randint(0, self.MX), self.MY], fill=color)
 
-        def draw_dots():
-            dots_amount = r.randint(0, 500)
+        def draw_dots(delimeter):
+            max_am = int(self.MX * self.MY / delimeter)
+            dots_amount = r.randint(max_am, max_am)
             for i in range(dots_amount):
-                color = self.__random_color(0, 128, 255)
+                color = self.__random_color(200, 255, 255)
                 d.point([r.randint(0, self.MX), r.randint(0, self.MX)], color)
 
         def turn(s, x, y, a):
             temp = Image.new('RGBA', (30, 40), self.__background)
             temp_draw = ImageDraw.Draw(temp)
-            temp_draw.text((10, 0), s, font=self.__random_font(), fill=self.__random_color(0, 128, 255))
+            temp_draw.text((10, 0), s, font=self.__random_font(), fill=self.__random_color(0, 90, 255))
             temp = temp.rotate(a, )
             self.__image.paste(temp, (x, y), temp)
 
@@ -58,14 +59,14 @@ class captcha:
         x = r.randint(10, 25)
         y = r.randint(5, 20)
         draw_lines()
-        draw_dots()
+        draw_dots(2)
         for symbol in self.__code:
             angle = r.randint(-30, 30)
             turn(symbol, x, y, angle)
             x += 30
         # TODO алгоритм искажения изображений
         draw_lines()
-        draw_dots()
+        draw_dots(4)
         del d
 
     def get_image(self):
