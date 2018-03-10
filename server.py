@@ -45,6 +45,7 @@ class HttpProcessor(BaseHTTPRequestHandler):
                     self.wfile.write('Good, access granted'.encode())
             self.__captcha_codes.pop(client)
             self.__request_time.pop(client)
+            self.__
         else:
             self.send_response(401)
             self.send_header('content-type', 'text/html')

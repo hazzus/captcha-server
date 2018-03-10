@@ -22,17 +22,19 @@ class captcha:
         return ImageFont.truetype('fonts/' + self.__fonts[r.randint(0, len(self.__fonts) - 1)]+'.ttf', r.randint(25, 35))
 
     def __init__(self):
+        self.LS = 40
         self.__create_captcha_code()
-        self.MX = len(self.__code) * 30 + 50
+        self.MX = len(self.__code) * self.LS + 50
         self.__background = self.__random_color(128, 255, 255)
         self.__image = Image.new('RGBA', (self.MX, self.MY), self.__background)
         self.__draw_captcha()
 
     def __create_captcha_code(self):
-        alphabet = '12345679abdefghijkmnpqrstvxyz'
+        alphabet = {'eng' : u'123456789abcdefghijklmnopqrstvxyz',
+                    'grc' : u'αβγδεζηθικλμνξοπρτυφχψω'}
         length = r.randint(4, 7)
         for i in range(length):
-            self.__code += r.choice(alphabet)
+            self.__code += r.choice(alphabet['eng'])
 
     def __draw_captcha(self):
         def draw_lines():
@@ -86,7 +88,7 @@ class captcha:
         for symbol in self.__code:
             angle = r.randint(-30, 30)
             turn(symbol, x, y, angle)
-            x += 30
+            x += self.LS
         make_waves()
         d = ImageDraw.Draw(self.__image)
         draw_lines()
