@@ -42,8 +42,8 @@ class captcha:
                 d.line([0, r.randint(0, self.MY), self.MX, r.randint(0, self.MY)], fill=color)
                 d.line([r.randint(0, self.MX), 0, r.randint(0, self.MX), self.MY], fill=color)
 
-        def draw_dots(delimeter):
-            max_am = int(self.MX * self.MY / delimeter)
+        def draw_dots(divider):
+            max_am = int(self.MX * self.MY / divider)
             dots_amount = r.randint(max_am, max_am)
             for i in range(dots_amount):
                 color = self.__random_color(200, 255, 255)

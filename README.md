@@ -4,11 +4,29 @@
 This server can provide captcha(generated itself). And check your answer on it.
 
 ## How to work with it?
+Of course you need to run `server.py`
 
 To get captcha, send GET request on the server.py(in example it was localhost:8080). To answer it, send POST request on the same address with field answer='your_code'. Response will show your result.
 
-Time is limited by 30 seconds. There is no auth(thinking about it)
+Time is limited by 30 seconds. There is no auth(TODO)
 
 ## Example
 
-You can see example of client in /client. `client.py` sends GET request and creates a form HTML-page to send POST
+You can see example of client in /client. `client.py` sends GET request and creates a form HTML-page to send POST.  
+This implemntation is quite bad but I only create server and "do not care" about client system.
+
+## Captcha class
+Actually difficulties were while creating `captcha` class in `captha.py`  
+Usage of this class:
+* Firstly import captcha:  
+`from captcha import captcha`
+* Now you can create captcha with this code:  
+`cp = captcha()`  
+    * Constructor of captcha will create captcha code and image
+    * You can get image:  
+        `cp.get_image()`
+    * To get code:  
+        `cp.get_code()`
+    * To clear image:  
+        `cp.clear_image()`  
+    Actually I need to create destructor and some other features like re-create captcha, but this is `TODO`)
